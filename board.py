@@ -17,11 +17,11 @@ def display_board(board):
       C   0 | X | . 
          ---+---+---
     """
-    print("    1   2   3")
+    print("      1   2   3")
     row_labels = ['A', 'B', 'C']
     for i, row in enumerate(board):
         print(f"  {row_labels[i]}   {' | '.join(row)} ")
-        if i < 2:
+        if i < 3:
             print("     ---+---+---")
 
 
