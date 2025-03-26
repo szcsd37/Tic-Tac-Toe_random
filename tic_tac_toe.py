@@ -30,7 +30,7 @@ def main():
             if current_player == 'X':
                 x, y = get_human_coordinates(board, current_player)
             else:
-                x, y = get_unbeatable_ai_coordinates(board)
+                x, y = get_unbeatable_ai_coordinates(board, current_player)
         
         board[x][y] = current_player
         
