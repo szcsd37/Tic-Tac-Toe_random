@@ -1,95 +1,79 @@
+import random
+
 def get_human_coordinates(board, current_player):
-  """
-  Should return the read coordinates for the tic tac toe board from the terminal.
-  The coordinates should be in the format  letter, number where the letter is 
-  A, B or C and the number 1, 2 or 3.
-  If the user enters an invalid coordinate (like Z0 or 1A, A11, sadfdsaf) 
-  than a warning message should appear and the coordinates reading process repeated.
-  If the user enters a coordinate that is already taken on the board
-  than a warning message should appear and the coordinates reading process repeated.
-  If the user enters the word "quit" in any format of capitalized letters the program
-  should stop.
-  """
-
-
-  pass
-
+    while True:
+        user_input = input("Enter coordinates (A-C,1-3) or 'quit' to exit: ").strip().upper()
+        
+        if user_input == "QUIT":
+            exit()
+        
+        if len(user_input) == 2 and user_input[0] in "ABC" and user_input[1] in "123":
+            row = "ABC".index(user_input[0])
+            col = int(user_input[1]) - 1 
+            
+            if board[row][col] == ".":
+                return row, col
+            else:
+                print("That spot is already taken. Try again.")
+        else:
+            print("Invalid input. Use format: Letter (A-C) and Number (1-3), e.g., A1.")
 
 def get_random_ai_coordinates(board, current_player):
-  """
-  Should return a tuple of 2 numbers. 
-  Each number should be between 0-2.
-  The chosen number should be only a free coordinate from the board.
-  If the board is full (all spots taken by either X or O) than "None"
-  should be returned.
-  """
-  pass
-
+    available_spots = [(r, c) for r in range(3) for c in range(3) if board[r][c] == "."]
+    return random.choice(available_spots) if available_spots else None
 
 def get_unbeatable_ai_coordinates(board, current_player):
-  """
-  Should return a tuple of 2 numbers. 
-  Each number should be between 0-2.
-  The chosen number should be only a free coordinate from the board.
-  The chosen coordinate should always stop the other player from winning or
-  maximize the current player's chances to win.
-  If the board is full (all spots taken by either X or O) than "None"
-  should be returned.
-  """
-  pass
+    def check_winner(board, player):
+        for row in board:
+            if row.count(player) == 3:
+                return True
+        for col in range(3):
+            if all(board[row][col] == player for row in range(3)):
+                return True
+        if all(board[i][i] == player for i in range(3)) or all(board[i][2 - i] == player for i in range(3)):
+            return True
+        return False
+    
+    opponent = "X" if current_player == "O" else "O"
+    available_spots = [(r, c) for r in range(3) for c in range(3) if board[r][c] == "."]
+    
+    for r, c in available_spots:
+        board[r][c] = current_player
+        if check_winner(board, current_player):
+            return r, c
+        board[r][c] = "."
+    
+    for r, c in available_spots:
+        board[r][c] = opponent
+        if check_winner(board, opponent):
+            return r, c
+        board[r][c] = "."
+    
+    return available_spots[0] if available_spots else None
 
-
-# run this file to test whether you have correctly implemented the functions
 if __name__ == "__main__":
-  board_1 = [
-    ["X", "X", "."],
-    ["X", ".", "."],
-    ["X", "X", "."],
-  ]
-  print("It should print the coordinates selected by the human player")
-  coordinates = get_human_coordinates(board_1, "X")
-  print(coordinates)
+    board_1 = [["X", "X", "."], ["X", ".", "."], ["X", "X", "."]]
+    print("It should print the coordinates selected by the human player")
+    # Uncomment the line below to test user input
+    # coordinates = get_human_coordinates(board_1, "X")
+    # print(coordinates)
 
-  board_2 = [
-    ["O", "O", "."],
-    ["X", "O", "."],
-    ["X", "X", "O"],
-  ]
-  print("The printed coordinate should be only (0,2) or (1,2)")
-  print(get_random_ai_coordinates(board_2))
-  print("The printed coordinate should be only (0,2) or (1,2)")
-  print(get_random_ai_coordinates(board_2))
-  print("The printed coordinate should be only (0,2) or (1,2)")
-  print(get_random_ai_coordinates(board_2))
+    board_2 = [["O", "O", "."], ["X", "O", "."], ["X", "X", "O"]]
+    print("The printed coordinate should be only (0,2) or (1,2)")
+    print(get_random_ai_coordinates(board_2, "X"))
 
-  board_3 = [
-    ["O", "X", "X"],
-    ["X", "O", "X"],
-    ["X", "O", "X"],
-  ]
-  print("The printed coordinate should be None")
-  print(get_random_ai_coordinates(board_3))
+    board_3 = [["O", "X", "X"], ["X", "O", "X"], ["X", "O", "X"]]
+    print("The printed coordinate should be None")
+    print(get_random_ai_coordinates(board_3, "X"))
 
-  board_4 = [
-    [".", "O", "."],
-    ["X", "O", "."],
-    ["X", "X", "O"],
-  ]
-  print("The printed coordinate should always be (0, 0)")
-  print(get_unbeatable_ai_coordinates(board_4, "X")) 
+    board_4 = [[".", "O", "."], ["X", "O", "."], ["X", "X", "O"]]
+    print("The printed coordinate should always be (0, 0)")
+    print(get_unbeatable_ai_coordinates(board_4, "X")) 
 
-  board_5 = [
-    ["X", "O", "."],
-    ["X", ".", "."],
-    ["O", "O", "X"],
-  ]
-  print("The printed coordinate should always be (1, 1)")
-  print(get_unbeatable_ai_coordinates(board_5, "O")) 
+    board_5 = [["X", "O", "."], ["X", ".", "."], ["O", "O", "X"]]
+    print("The printed coordinate should always be (1, 1)")
+    print(get_unbeatable_ai_coordinates(board_5, "O")) 
 
-  board_6 = [
-    ["O", "O", "."],
-    ["O", "X", "."],
-    [".", "X", "."],
-  ]
-  print("The printed coordinate should either (0, 2) or (2, 0)")
-  print(get_unbeatable_ai_coordinates(board_6)) 
+    board_6 = [["O", "O", "."], ["O", "X", "."], [".", "X", "."]]
+    print("The printed coordinate should either (0, 2) or (2, 0)")
+    print(get_unbeatable_ai_coordinates(board_6, "X"))
