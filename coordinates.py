@@ -1,4 +1,5 @@
 import random
+import math
 
 def get_human_coordinates(board, current_player):
     while True:
@@ -23,6 +24,8 @@ def get_random_ai_coordinates(board, current_player):
     return random.choice(available_spots) if available_spots else None
 
 def get_unbeatable_ai_coordinates(board, current_player):
+    opponent = "X" if current_player == "O" else "O"
+    
     def check_winner(board, player):
         for row in board:
             if row.count(player) == 3:
@@ -34,29 +37,52 @@ def get_unbeatable_ai_coordinates(board, current_player):
             return True
         return False
     
-    opponent = "X" if current_player == "O" else "O"
-    available_spots = [(r, c) for r in range(3) for c in range(3) if board[r][c] == "."]
-    
-    for r, c in available_spots:
-        board[r][c] = current_player
+    def minimax(board, depth, is_maximizing):
         if check_winner(board, current_player):
-            return r, c
-        board[r][c] = "."
-    
-    for r, c in available_spots:
-        board[r][c] = opponent
+            return 10 - depth
         if check_winner(board, opponent):
-            return r, c
-        board[r][c] = "."
+            return depth - 10
+        if all(board[r][c] != "." for r in range(3) for c in range(3)):
+            return 0
+
+        if is_maximizing:
+            best_score = -math.inf
+            for r in range(3):
+                for c in range(3):
+                    if board[r][c] == ".":
+                        board[r][c] = current_player
+                        score = minimax(board, depth + 1, False)
+                        board[r][c] = "."
+                        best_score = max(best_score, score)
+            return best_score
+        else:
+            best_score = math.inf
+            for r in range(3):
+                for c in range(3):
+                    if board[r][c] == ".":
+                        board[r][c] = opponent
+                        score = minimax(board, depth + 1, True)
+                        board[r][c] = "."
+                        best_score = min(best_score, score)
+            return best_score
     
-    return available_spots[0] if available_spots else None
+    best_move = None
+    best_score = -math.inf
+    for r in range(3):
+        for c in range(3):
+            if board[r][c] == ".":
+                board[r][c] = current_player
+                score = minimax(board, 0, False)
+                board[r][c] = "."
+                if score > best_score:
+                    best_score = score
+                    best_move = (r, c)
+    
+    return best_move
 
 if __name__ == "__main__":
     board_1 = [["X", "X", "."], ["X", ".", "."], ["X", "X", "."]]
     print("It should print the coordinates selected by the human player")
-    # Uncomment the line below to test user input
-    # coordinates = get_human_coordinates(board_1, "X")
-    # print(coordinates)
 
     board_2 = [["O", "O", "."], ["X", "O", "."], ["X", "X", "O"]]
     print("The printed coordinate should be only (0,2) or (1,2)")

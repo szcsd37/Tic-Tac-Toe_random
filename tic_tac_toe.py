@@ -11,12 +11,11 @@ def main():
     game_mode = get_menu_option()
     board = get_empty_board()
     is_game_running = True
-    current_player = 'X'  # Start with 'X'
+    current_player = 'X'
     
     while is_game_running:
         display_board(board)
-        
-        # Determine move function based on game mode and current player
+
         if game_mode == HUMAN_VS_HUMAN:
             x, y = get_human_coordinates(board, current_player)
         elif game_mode == RANDOM_AI_VS_RANDOM_AI:
@@ -34,7 +33,6 @@ def main():
         
         board[x][y] = current_player
         
-        # Check for a winner or a tie
         winning_player = get_winning_player(board)
         its_a_tie = is_board_full(board)
         
@@ -47,7 +45,6 @@ def main():
             print("It's a tie!")
             is_game_running = False
         else:
-            # Alternate the current player
             current_player = 'O' if current_player == 'X' else 'X'
 
 if __name__ == "__main__":

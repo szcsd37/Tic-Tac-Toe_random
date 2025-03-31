@@ -9,7 +9,7 @@ def get_human_coordinates(board, current_player):
         
         if len(user_input) == 2 and user_input[0] in "ABC" and user_input[1] in "123":
             row = "ABC".index(user_input[0])
-            col = int(user_input[1]) - 1
+            col = int(user_input[1]) - 1 
             
             if board[row][col] == ".":
                 return row, col
@@ -54,9 +54,6 @@ def get_unbeatable_ai_coordinates(board, current_player):
 if __name__ == "__main__":
     board_1 = [["X", "X", "."], ["X", ".", "."], ["X", "X", "."]]
     print("It should print the coordinates selected by the human player")
-    # Uncomment the line below to test user input
-    # coordinates = get_human_coordinates(board_1, "X")
-    # print(coordinates)
 
     board_2 = [["O", "O", "."], ["X", "O", "."], ["X", "X", "O"]]
     print("The printed coordinate should be only (0,2) or (1,2)")
