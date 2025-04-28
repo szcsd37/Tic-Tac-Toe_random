@@ -19,7 +19,7 @@ def main():
         if game_mode == HUMAN_VS_HUMAN:
             x, y = get_human_coordinates(board, current_player)
         elif game_mode == RANDOM_AI_VS_RANDOM_AI:
-            x, y = get_random_ai_coordinates(board, current_player)
+            x, y = get_random_ai_coordinates(board)
         elif game_mode == HUMAN_VS_RANDOM_AI:
             if current_player == 'X':
                 x, y = get_human_coordinates(board, current_player)

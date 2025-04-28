@@ -19,7 +19,7 @@ def get_human_coordinates(board, current_player):
         else:
             print("Invalid input. Use format: Letter (A-C) and Number (1-3), e.g., A1.")
 
-def get_random_ai_coordinates(board, current_player):
+def get_random_ai_coordinates(board):
     available_spots = [(r, c) for r in range(3) for c in range(3) if board[r][c] == "."]
     return random.choice(available_spots) if available_spots else None
 
