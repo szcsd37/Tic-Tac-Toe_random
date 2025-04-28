@@ -1,22 +1,8 @@
 def get_empty_board():
-    '''
-    Should return a list with 3 sublists.
-    Each sublist should contain 3 times the "." character
-    '''
     return [['.'] * 3 for _ in range(3)]
 
 
 def display_board(board):
-    """
-    Should print the tic tac toe board in a format similar to
-         1   2   3
-      A   X | O | . 
-         ---+---+---
-      B   X | O | .
-         ---+---+---
-      C   0 | X | . 
-         ---+---+---
-    """
     print("      1   2   3")
     row_labels = ['A', 'B', 'C']
     for i, row in enumerate(board):
@@ -26,10 +12,6 @@ def display_board(board):
 
 
 def is_board_full(board):
-    """
-    Should return True if there are no more empty places on the board,
-    otherwise should return False
-    """
     for row in board:
         if '.' in row:
             return False
@@ -37,10 +19,6 @@ def is_board_full(board):
 
 
 def get_winning_player(board):
-    """
-    Should return the player that wins based on the tic tac toe rules.
-    If no player has won, then "None" is returned.
-    """
     # Check rows and columns
     for i in range(3):
         if board[i][0] == board[i][1] == board[i][2] and board[i][0] != '.':
